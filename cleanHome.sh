@@ -13,21 +13,21 @@
 KEEP_DIRS=(Desktop Documents Downloads Music Pictures Public Videos Applications Library go .ssh)
 SUB_DIRS_TO_CLEAN=(Desktop Documents Downloads)
 KEEP_FILES=(
-  .bash_profile 
+  .bash_profile
   .bash_history
   .bash_sessions
   .zsh_sessions
-  .zsh-update 
+  .zsh-update
   .zsh-update.lock
-  .zsh_history 
-  .vimrc 
-  .zshrc 
+  .zsh_history
+  .vimrc
+  .zshrc
   .viminfo
   .gitconfig
   .gitignore
   .gitignore_global
   .git-credentials
-  )
+)
 
 # propmt the user to confirm the deletion
 # echo "This script will delete all files and directories in your home directory except the ones specified in the KEEP_DIRS and KEEP_FILES arrays in the script"
@@ -38,11 +38,11 @@ KEEP_FILES=(
 # fi
 #   exit 1
 
-
 # Loop through all files and directories in the user's home folder hiden and non-hidden
-for file in $(echo ~/* ~/.*)
-# for file in ~/.*
-do
+for file in $(
+  # for file in ~/.*
+  echo ~/* ~/.*
+); do
   # Check if the file is a directory
   if [ -d "$file" ]; then
     # Check if the directory should be kept
@@ -51,23 +51,22 @@ do
       if [[ "${SUB_DIRS_TO_CLEAN[@]}" =~ $(basename "$file") ]]; then
         # Loop through all files and directories in the subdirectory
         # for subFile in  $(echo "$file"/* "$file"/.*)
-        for subFile in "$file"/*
-        do
+        for subFile in "$file"/*; do
           # Delete the file or directory
           echo "Deleting $subFile"
           rm -rf "$subFile"
-      fi
         done
+      fi
       continue
-  fi
     fi
+  fi
 
   # Check if the file is a regular file
   if [ -f "$file" ]; then
     # Check if the file should be kept
     if [[ "${KEEP_FILES[@]}" =~ $(basename "$file") ]]; then
     fi
-      continue
+    continue
   fi
 
   # Delete the file or directory

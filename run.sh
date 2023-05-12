@@ -8,3 +8,5 @@ source ./cleanHome.sh
 source ./installTools.sh
 
 # ----------------------- End -----------------------
+
+# https://rb.gy/r9wp3

@@ -9,25 +9,23 @@
 # install sublime text and merge(Graphical Git Client), vscode, vim
 # add git config, ignore .DS_Store
 
-
 # -------------- Get current logged in user --------------
 # Get current logged in user
-currentuser=`stat -f '%u %Su' /dev/console | awk '{ print $2 }'`
+currentuser=$(stat -f '%u %Su' /dev/console | awk '{ print $2 }')
 echo "\n\n-------------- Current logged in user is: $currentuser--------------"
 
 # -------------- Install homebrew --------------
 # if brew is not installed install it
 echo "\n\n-------------- homebrew --------------\n\n"
-brew --version >> /dev/null 2>&1
+brew --version >>/dev/null 2>&1
 brew_error=$?
-if [ $brew_error -ne 0 ]
-then
+if [ $brew_error -ne 0 ]; then
   echo "-------------- Installing homebrew --------------\n\n"
 
   # install homebrew
   export HOMEBREW_NO_INSTALL_FROM_API=1
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/${currentuser}/.zprofile
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>/Users/${currentuser}/.zprofile
 else
   echo "-------------- homebrew is already installed --------------\n\n"
 fi
@@ -39,14 +37,13 @@ sudo -iu ${currentuser} go version
 golang_version_error=$?
 
 echo "\n\n-------------- Golang version error: $golang_version_error --------------\n\n"
-if [ $golang_version_error -ne 0 ]
-then
+if [ $golang_version_error -ne 0 ]; then
   echo "-------------- Installing Golang --------------\n\n"
-  # install go 
+  # install go
   brew install golang@1.20
 
   # Set GOROOT into path
-  echo 'export GOROOT=/opt/homebrew/bin/go' >> /Users/${currentuser}/.zprofile
+  echo 'export GOROOT=/opt/homebrew/bin/go' >>/Users/${currentuser}/.zprofile
 
   echo "-------------- Installing Golang Packages --------------\n\n"
   go_pkgs=(
@@ -63,19 +60,16 @@ then
   )
 
   # Install required Go dependencies
-  for go_pkg in "${go_pkgs[@]}"
-  do
+  for go_pkg in "${go_pkgs[@]}"; do
     sudo -iu ${currentuser} go install -v "$go_pkg"
   done
 else
   echo "-------------- Golang is already installed --------------\n\n"
 fi
 
-
 # -------------- Install Git, wget, jq, coreutils, gofumpt (go fmt) using homebrew --------------
 echo "\n\n-------------- Install Git, wget, jq, coreutils, gofumpt (go fmt) using homebrew --------------\n\n"
 brew install git wget jq coreutils gofumpt
-
 
 # -------------- Add git config --------------
 
@@ -83,21 +77,18 @@ brew install git wget jq coreutils gofumpt
 echo "\n\n-------------- Adding git config --------------\n\n"
 touch /Users/$currentuser/.gitignore_global
 git config --global core.excludesfile /Users/$currentuser/.gitignore_global
-echo .DS_Store >> /Users/$currentuser/.gitignore_global
-
+echo .DS_Store >>/Users/$currentuser/.gitignore_global
 
 # -------------- install iterm2 --------------
 echo "\n\n-------------- install iterm2 --------------\n\n"
 # check if it's not isntalled before
-brew list --cask iterm2 >> /dev/null 2>&1
+brew list --cask iterm2 >>/dev/null 2>&1
 iterm2_error=$?
-if [ $iterm2_error -ne 0 ]
-then
+if [ $iterm2_error -ne 0 ]; then
   brew install --cask iterm2
 else
   echo "-------------- iterm2 is already installed --------------\n\n"
 fi
-
 
 # -------------- install oh-my-zsh --------------
 echo "\n\n-------------- install oh-my-zsh --------------\n\n"
@@ -116,7 +107,7 @@ brew install --cask visual-studio-code
 
 # copy VSCode settings
 echo "\n\n-------------- copy VSCode settings --------------\n\n"
-touch /Users/$currentuser/Library/Application\ Support/Code/User/settings.json >> /dev/null 2>&1
+touch /Users/$currentuser/Library/Application\ Support/Code/User/settings.json >>/dev/null 2>&1
 cp ./.config/Code/User/settings.json /Users/$currentuser/Library/Application\ Support/Code/User/settings.json
 
 # Install Visual Studio Extensions for Go
