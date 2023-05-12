@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # install homebrew, and add it to the path
 # install git, wget, jq, coreutils, gofumpt (go fmt) using homebrew
 # instal golang, and add it to the path

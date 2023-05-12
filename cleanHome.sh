@@ -35,8 +35,8 @@ KEEP_FILES=(
 # echo ""
 # if [[ ! $REPLY =~ ^[Yy]$ ]]
 # then
-#   exit 1
 # fi
+#   exit 1
 
 
 # Loop through all files and directories in the user's home folder hiden and non-hidden
@@ -56,18 +56,18 @@ do
           # Delete the file or directory
           echo "Deleting $subFile"
           rm -rf "$subFile"
-        done
       fi
+        done
       continue
-    fi
   fi
+    fi
 
   # Check if the file is a regular file
   if [ -f "$file" ]; then
     # Check if the file should be kept
     if [[ "${KEEP_FILES[@]}" =~ $(basename "$file") ]]; then
-      continue
     fi
+      continue
   fi
 
   # Delete the file or directory
