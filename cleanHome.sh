@@ -38,38 +38,58 @@ KEEP_FILES=(
 # fi
 #   exit 1
 
-# Loop through all files and directories in the user's home folder hiden and non-hidden
-for file in $(
-  # for file in ~/.*
-  echo ~/* ~/.*
-); do
-  # Check if the file is a directory
-  if [ -d "$file" ]; then
-    # Check if the directory should be kept
-    if [[ "${KEEP_DIRS[@]}" =~ $(basename "$file") ]]; then
-      # Check if the directory should be cleaned
-      if [[ "${SUB_DIRS_TO_CLEAN[@]}" =~ $(basename "$file") ]]; then
-        # Loop through all files and directories in the subdirectory
-        # for subFile in  $(echo "$file"/* "$file"/.*)
-        for subFile in "$file"/*; do
-          # Delete the file or directory
-          echo "Deleting $subFile"
-          rm -rf "$subFile"
-        done
-      fi
-      continue
-    fi
-  fi
+delete_list() {
+  local files=("$@")
 
-  # Check if the file is a regular file
-  if [ -f "$file" ]; then
-    # Check if the file should be kept
-    if [[ "${KEEP_FILES[@]}" =~ $(basename "$file") ]]; then
+  for file in "${files[@]}"; do
+    # Check if the file is a directory
+    if [ -d "$file" ]; then
+      # Check if the directory should be kept
+      if [[ "${KEEP_DIRS[@]}" =~ $(basename "$file") ]]; then
+        # Check if the directory should be cleaned
+        if [[ "${SUB_DIRS_TO_CLEAN[@]}" =~ $(basename "$file") ]]; then
+          # Loop through all files and directories in the subdirectory
+          # for subFile in  $(echo "$file"/* "$file"/.*)
+          for subFile in "$file"/*; do
+            # Delete the file or directory
+            echo "Deleting subFile: $subFile"
+            rm -rf "$subFile"
+          done
+        fi
+        continue
+      fi
     fi
+
+    # Check if the file is a regular file
+    if [ -f "$file" ]; then
+      # Check if the file should be kept
+      if [[ "${KEEP_FILES[@]}" =~ $(basename "$file") ]]; then
+        continue
+      fi
+    fi
+
+    # Delete the file or directory
+    echo "Deleting: $file"
+    rm -rf "$file"
+  done
+}
+
+# create a list of visible files and folders in home folder
+VISIBLE=()
+while IFS= read -r -d $'\0' file; do
+  # append to VISIBLE
+  VISIBLE+=("$file")
+done < <(find ~/* -maxdepth 0 -type f -o -type d -print0)
+
+# create a list of hidden files and folders in home folder
+HIDDEN=()
+while IFS= read -r -d $'\0' file; do
+  # don't add "." and ".. basenames
+  if [[ $(basename "$file") == "." || $(basename "$file") == ".." ]]; then
     continue
   fi
+  HIDDEN+=("$file")
+done < <(find ~/.* -maxdepth 0 -type f -o -type d -print0)
 
-  # Delete the file or directory
-  echo "Deleting $file"
-  rm -rf "$file"
-done
+delete_list "${VISIBLE[@]}"
+delete_list "${HIDDEN[@]}"
