@@ -90,10 +90,6 @@ else
   echo "-------------- iterm2 is already installed --------------\n\n"
 fi
 
-# -------------- install oh-my-zsh --------------
-echo "\n\n-------------- install oh-my-zsh --------------\n\n"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
 # -------------- install IDEs --------------
 
 # install sublime text and merge(Graphical Git Client)
@@ -127,5 +123,9 @@ git clone https://github.com/fatih/vim-go.git /home/$currentuser/.vim/pack/plugi
 # Launch Vim in Ex mode, execute the :GoInstallBinaries command to install Go binaries, and then quit the editor
 echo "\n\n-------------- Install Vim-Go dependencies --------------\n\n"
 printf ':GoInstallBinaries\n:q\n' | vim -e
+
+# -------------- install oh-my-zsh --------------
+echo "\n\n-------------- install oh-my-zsh --------------\n\n"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 echo "\n\n-------------- Done --------------\n\n"
